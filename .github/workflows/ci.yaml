@@ -43,10 +43,27 @@ jobs:
       - name: Run go vet
         run: go vet .
 
-  build:
+  sonarqube:
     needs:
       - test
       - lint
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Run SonarQube scan
+        uses: SonarSource/sonarqube-scan-action@v8.3.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build:
+    needs:
+      - sonarqube
 
     runs-on: ubuntu-latest
 
