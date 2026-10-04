@@ -4,12 +4,13 @@ on:
   push:
     branches:
       - main
+
   pull_request:
     branches:
       - main
 
 jobs:
-  test-and-build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,6 +24,40 @@ jobs:
 
       - name: Run tests
         run: go test .
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      - name: Check formatting
+        run: gofmt -d .
+
+      - name: Run go vet
+        run: go vet .
+
+  build:
+    needs:
+      - test
+      - lint
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
 
       - name: Build application
         run: go build -o pipeline-pulse .
