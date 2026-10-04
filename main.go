@@ -21,9 +21,9 @@ func main() {
 		_, _ = w.Write([]byte("Backend is healthy ✅"))
 	})
 
-	log.Println("server running on http://localhost:8080")
+	log.Println("server running on http://localhost:8081")
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":8081", nil); err != nil {
 		log.Fatal(err)
 	}
 }
