@@ -61,3 +61,16 @@ jobs:
 
       - name: Build application
         run: go build -o pipeline-pulse .
+
+  docker-build:
+    needs:
+      - build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Build Docker image
+        run: docker build -t pipeline-pulse .
